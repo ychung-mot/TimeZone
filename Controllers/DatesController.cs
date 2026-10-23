@@ -30,7 +30,7 @@ namespace TimeZone.Controllers
                 return new
                 {
                     PacificTime = pacificDate,
-                    UtcTime = DateUtils.ConvertPacificToUtcTime(localDate)
+                    UtcTime = DateUtils.ConvertBcTimeToUtc(localDate)
                 };
             });
 
@@ -62,7 +62,7 @@ namespace TimeZone.Controllers
                 return new
                 {
                     UtcTime = utcDate,
-                    PacificTime = DateUtils.ConvertUtcToPacificTime(utcDate)
+                    PacificTime = DateUtils.ConvertUtcToBcTime(utcDate)
                 };
             });
 

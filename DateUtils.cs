@@ -1,13 +1,16 @@
 ﻿using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace TimeZone
+namespace TimeZone.Controllers
 {
     public static class TimeZones
     {
         public const string VancouverTimeZone = "America/Vancouver";
-        public const string BritishColumbiaTimeZone = "Canada/Pacific";
-        public const string PacificTimeZone = "Pacific Standard Time";
+        public const string BritishColumbiaTimeZone = "British Columbia Standard Time";
+        public const string BritishColumbiaSqlTimeZone = "British Columbia Standard Time";
+        public static string BritishColumbiaTimeZoneId => OperatingSystem.IsWindows()
+            ? BritishColumbiaTimeZone
+            : VancouverTimeZone;
     }
 
     public static class DateUtils
@@ -22,14 +25,15 @@ namespace TimeZone
         {
             return date.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
         }
-        public static DateTime? ConvertUtcToPacificTime(DateTime? utcDate)
+
+        public static DateTime? ConvertUtcToBcTime(DateTime? utcDate)
         {
             if (utcDate == null)
                 return null;
 
             var utcValue = DateTime.SpecifyKind((DateTime)utcDate, DateTimeKind.Unspecified);
 
-            var date = ConvertTimeFromUtc(utcValue, TimeZones.VancouverTimeZone);
+            var date = ConvertTimeFromUtc(utcValue, TimeZones.BritishColumbiaTimeZoneId);
 
             if (date != null)
                 return (DateTime)date;
@@ -54,14 +58,12 @@ namespace TimeZone
             }
         }
 
-        public static DateTime? ConvertPacificToUtcTime(DateTime? pstDate)
+        public static DateTime? ConvertBcTimeToUtc(DateTime? pstDate)
         {
             if (pstDate == null)
                 return null;
 
-            var localValue = DateTime.SpecifyKind((DateTime)pstDate, DateTimeKind.Unspecified);
-
-            var date = ConvertTimeToUtc(localValue, TimeZones.VancouverTimeZone);
+            var date = ConvertTimeToUtc((DateTime)pstDate, TimeZones.BritishColumbiaTimeZoneId);
 
             if (date != null)
                 return (DateTime)date;
@@ -86,14 +88,9 @@ namespace TimeZone
             }
         }
 
-        private static bool IsOnOrAfterNovember2026(DateTime date)
-        {
-            return date.Year > 2026 || (date.Year == 2026 && date.Month >= 11);
-        }
-
         public static string ConvertUtcToPacificTime24HourString(DateTime? utcDate)
         {
-            var pstDate = ConvertUtcToPacificTime(utcDate);
+            var pstDate = ConvertUtcToBcTime(utcDate);
 
             if (pstDate == null || pstDate == DateTime.MinValue)
                 return "";
@@ -103,7 +100,7 @@ namespace TimeZone
 
         public static string ConvertUtcToPacificTime12HourString(DateTime? utcDate)
         {
-            var pstDate = ConvertUtcToPacificTime(utcDate);
+            var pstDate = ConvertUtcToBcTime(utcDate);
 
             if (pstDate == null || pstDate == DateTime.MinValue)
                 return "";
@@ -372,7 +369,7 @@ namespace TimeZone
         /// <returns></returns>
         public static DateTime? ConvertUtcToBCTime(DateTime? utcDate)
         {
-            return ConvertUtcToPacificTime(utcDate);
+            return ConvertUtcToBcTime(utcDate);
         }
 
     }
