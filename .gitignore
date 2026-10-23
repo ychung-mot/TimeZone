@@ -1,0 +1,41 @@
+# .NET build and publish output
+**/[Bb]in/
+**/[Oo]bj/
+[Aa]rtifacts/
+[Pp]ublish/
+
+# Visual Studio and per-user IDE settings
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.idea/
+
+# Test results and coverage
+TestResults/
+**/TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# NuGet packages (keep lock files and package configuration)
+*.nupkg
+*.snupkg
+packages/
+
+# Local environment secrets (keep sample environment files)
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+Desktop.ini
